@@ -36,4 +36,8 @@ public class UsersService {
         }
         return response;
     }
+
+    public Object signin(Map<String,Object> data) {
+        return null;
+    }
 }
