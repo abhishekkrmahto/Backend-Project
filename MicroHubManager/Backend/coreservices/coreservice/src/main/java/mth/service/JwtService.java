@@ -23,7 +23,8 @@ public class JwtService {
                 .setClaims(payload)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(key);
+                .signWith(key)
+                .compact();
     }
     public Map<String, Object> validateJWT(String token) {
 

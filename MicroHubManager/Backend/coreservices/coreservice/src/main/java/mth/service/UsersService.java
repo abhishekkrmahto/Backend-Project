@@ -14,6 +14,9 @@ public class UsersService {
     @Autowired
     UsersRespository UR;
 
+    @Autowired
+    JwtService JWT;
+
     public Object signup(Users U) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -37,7 +40,21 @@ public class UsersService {
         return response;
     }
 
-    public Object signin(Map<String,Object> data) {
-        return null;
+    public Object signin(Map<String, Object> data) {
+        Map<String,Object>response = new HashMap<>();
+        try{
+            Object role = UR.validateCredentials(data.get("username").toString(),data.get("password").toString());
+            if(role !=null){
+                response.put("CODE:- ",200);
+                response.put("jwt",JWT.generateJWT(data.get("username"),role));
+            }else{
+                response.put("CODE:- ",404);
+                response.put("message:- ","Invalid creds!!");
+            }
+        }catch (Exception e){
+            response.put("CODE:- ",500);
+            response.put("message:- ",e.getMessage());
+        }
+        return response;
     }
 }

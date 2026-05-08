@@ -23,7 +23,7 @@ public class UsersController {
         return US.signup(u);
     }
 
-
+    @PostMapping("signin")
     public Object signIn(@RequestBody Map<String,Object> data){
         return US.signin(data);
     }
