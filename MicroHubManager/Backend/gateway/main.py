@@ -1,38 +1,26 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-<<<<<<< HEAD
-=======
-from Controllers.init import *
->>>>>>> 710dfec (added MVC artitechture !!)
+from Controllers.authenticationController import router
 
-app = FastAPI() # instance of fastAPI 
+app = FastAPI()
 
-origins = ["https://localhost:5173/"]
-
-<<<<<<< HEAD
-@app.get("/")
-def home():
-    return {
-=======
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(AuthenticationRouter)
+app.include_router(router)
 
 @app.get("/")
 def home():
-    return {    
->>>>>>> 710dfec (added MVC artitechture !!)
+    return {
         "name":"ABHISHEK",
         "roll":4516
     }
-    
+
 @app.get("/welcome")
 def welcome():
-    return "ABHISHEK WELCOMES U 💗,"
-
+    return "ABHISHEK WELCOMES U 💗"

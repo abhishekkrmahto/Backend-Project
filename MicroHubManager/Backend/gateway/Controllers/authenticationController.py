@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,Header
 from models.schemas import SigninSchema, SignupSchema
 import httpx
 
@@ -16,12 +16,27 @@ async def signup(U: SignupSchema):
         )
     return response.json()
 
-
 @router.post("/signin")
 async def signin(U: SigninSchema):
-    async with httpx.AsyncClient() as client:
+    print("Request came")
+
+    async with httpx.AsyncClient(timeout=5.0) as client:
         response = await client.post(
             SPRING_URL + "user/signin",
             json=U.model_dump()
+        )
+
+    print(response.status_code)
+    print(response.text)
+
+    return response.json()
+
+
+@router.get("/uinfo")
+async def uinfo(Token:str = Header(...)):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            SPRING_URL + "user/uinfo",
+            headers={"Token":Token}
         )
     return response.json()

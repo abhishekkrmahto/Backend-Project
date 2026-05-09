@@ -15,4 +15,8 @@ public interface UsersRespository extends JpaRepository<Users, Long> {
 
     @Query("select U.role from Users U where U.email=:username")
     Object validateCredentials(@Param("username") String username ,@Param("password") String password);
+
+
+    @Query("select U from Users U where U.email=:email")
+    public Object findByEmail(@Param("email") String email);
 }
