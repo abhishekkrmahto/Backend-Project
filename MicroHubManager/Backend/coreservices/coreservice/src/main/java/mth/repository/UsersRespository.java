@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import mth.models.Users;
 
+import java.util.List;
+
 @Repository
 public interface UsersRespository extends JpaRepository<Users, Long> {
 
@@ -19,4 +21,7 @@ public interface UsersRespository extends JpaRepository<Users, Long> {
 
     @Query("select U from Users U where U.email=:email")
     public Object findByEmail(@Param("email") String email);
+
+    @Query("select M from Menus M join Rolemapping R on M.mid=R.mid where R.role=:role order by M.mid")
+    public List<Object> getMenus(@Param("role") Long role);
 }
