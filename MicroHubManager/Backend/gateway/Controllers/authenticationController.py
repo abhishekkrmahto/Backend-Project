@@ -40,3 +40,13 @@ async def uinfo(Token:str = Header(...)):
             headers={"Token":Token}
         )
     return response.json()
+
+
+@router.get("/profile")
+async def profile(Token:str = Header(...)):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            SPRING_URL + "user/profile",
+            headers={"Token":Token}
+        )
+    return response.json()

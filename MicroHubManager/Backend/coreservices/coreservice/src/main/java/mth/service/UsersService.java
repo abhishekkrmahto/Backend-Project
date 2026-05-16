@@ -26,7 +26,7 @@ public class UsersService {
                 response.put("code", 501);
                 response.put("message", "Email ID already registered");
             } else {
-                U.setRole(1); // Setting default role to the new user
+                U.setRole(1L); // Setting default role to the new user
                 U.setStatus(1); // Make the status of the user as active
 
                 UR.save(U); // Insert into the database table (users)✅
@@ -73,6 +73,25 @@ public class UsersService {
             response.put("code", 200);
             response.put("fullname", U.getFullname());
             response.put("menuList",menuList);
+        }catch(Exception e)
+        {
+            response.put("code", 500);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+
+    public Object getProfile(String token)
+    {
+        Map<String, Object> response = new HashMap<>();
+        try
+        {
+            Map<String, Object> payload = JWT.validateJWT(token);
+            String email = (String) payload.get("username");
+            Object user = UR.profileByEmail(email);
+
+            response.put("code", 200);
+            response.put("user", user);
         }catch(Exception e)
         {
             response.put("code", 500);

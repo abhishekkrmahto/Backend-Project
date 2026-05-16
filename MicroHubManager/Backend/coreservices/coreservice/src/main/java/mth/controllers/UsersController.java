@@ -32,4 +32,9 @@ public class UsersController {
     public Object uinfo(@RequestHeader("Token") String token){
         return US.uinfo(token);
     }
+
+    @GetMapping("/profile")
+    public Object profile(@RequestHeader("Token")String token){
+        return US.getProfile(token);
+    }
 }
