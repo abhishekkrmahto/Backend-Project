@@ -50,3 +50,13 @@ async def profile(Token:str = Header(...)):
             headers={"Token":Token}
         )
     return response.json()
+
+
+@router.get("/getallusers/{PAGE}/{SIZE}")
+async def get_all_users(PAGE: int,SIZE: int,Token: str = Header(...)):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{SPRING_URL}user/getallusers/{PAGE}/{SIZE}",
+            headers={"token": Token}
+        )
+    return response.json()

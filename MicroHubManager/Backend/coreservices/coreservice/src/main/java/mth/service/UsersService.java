@@ -5,7 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import mth.models.Users;
 import mth.repository.UsersRespository;
@@ -97,6 +103,27 @@ public class UsersService {
             response.put("code", 500);
             response.put("message", e.getMessage());
         }
+        return response;
+    }
+
+    public Object getAllUsers(int page,int size,String token){
+        Map<String,Object>response = new HashMap<>();
+        try{
+            JWT.validateJWT(token);
+            Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size); // for pagination
+            Page<Users> users = UR.findAll(pageable);
+
+            response.put("code", 200);
+            response.put("page", page);
+            response.put("size", size);
+            response.put("totalpages", users.getTotalPages());
+            response.put("users", users.getContent());
+
+
+        }catch (Exception e){
+            response.put("message",e.getMessage());
+        }
+
         return response;
     }
 

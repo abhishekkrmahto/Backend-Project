@@ -37,4 +37,9 @@ public class UsersController {
     public Object profile(@RequestHeader("Token")String token){
         return US.getProfile(token);
     }
+
+    @GetMapping("/getallusers/{PAGE}/{SIZE}")
+    public Object getAllUsers(@PathVariable("PAGE") int page,@PathVariable("SIZE") int size,@RequestHeader("token")String token){
+        return US.getAllUsers(page,size,token);
+    }
 }
