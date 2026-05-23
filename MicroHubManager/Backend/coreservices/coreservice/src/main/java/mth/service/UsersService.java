@@ -14,12 +14,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import mth.models.Users;
+import mth.repository.RoleRepository;
 import mth.repository.UsersRespository;
 
 @Service
 public class UsersService {
     @Autowired
     UsersRespository UR;
+
+    @Autowired
+    RoleRepository RR;
 
     @Autowired
     JwtService JWT;
@@ -48,67 +52,61 @@ public class UsersService {
     }
 
     public Object signin(Map<String, Object> data) {
-        Map<String,Object>response = new HashMap<>();
-        try{
-            Object role = UR.validateCredentials(data.get("username").toString(),data.get("password").toString());
-            if(role !=null){
-                response.put("code",200);
-                response.put("jwt",JWT.generateJWT(data.get("username"),role));
-            }else{
-                response.put("code",404);
-                response.put("message:- ","Invalid creds!!");
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Object role = UR.validateCredentials(data.get("username").toString(), data.get("password").toString());
+            if (role != null) {
+                response.put("code", 200);
+                response.put("jwt", JWT.generateJWT(data.get("username"), role));
+            } else {
+                response.put("code", 404);
+                response.put("message:- ", "Invalid creds!!");
             }
-        }catch (Exception e){
-            response.put("code",500);
-            response.put("message:- ",e.getMessage());
+        } catch (Exception e) {
+            response.put("code", 500);
+            response.put("message:- ", e.getMessage());
         }
         return response;
     }
 
-    public Object uinfo(String token)
-    {
+    public Object uinfo(String token) {
         Map<String, Object> response = new HashMap<>();
-        try
-        {
+        try {
             Map<String, Object> payload = JWT.validateJWT(token);
             String email = (String) payload.get("username");
             Users U = (Users) UR.findByEmail(email);
 
-            List<Object>menuList = UR.getMenus(Long.valueOf(U.getRole()));
+            List<Object> menuList = UR.getMenus(Long.valueOf(U.getRole()));
 
             response.put("code", 200);
             response.put("fullname", U.getFullname());
-            response.put("menuList",menuList);
-        }catch(Exception e)
-        {
+            response.put("menuList", menuList);
+        } catch (Exception e) {
             response.put("code", 500);
             response.put("message", e.getMessage());
         }
         return response;
     }
 
-    public Object getProfile(String token)
-    {
+    public Object getProfile(String token) {
         Map<String, Object> response = new HashMap<>();
-        try
-        {
+        try {
             Map<String, Object> payload = JWT.validateJWT(token);
             String email = (String) payload.get("username");
             Object user = UR.profileByEmail(email);
 
             response.put("code", 200);
             response.put("user", user);
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             response.put("code", 500);
             response.put("message", e.getMessage());
         }
         return response;
     }
 
-    public Object getAllUsers(int page,int size,String token){
-        Map<String,Object>response = new HashMap<>();
-        try{
+    public Object getAllUsers(int page, int size, String token) {
+        Map<String, Object> response = new HashMap<>();
+        try {
             JWT.validateJWT(token);
             Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size); // for pagination
             Page<Users> users = UR.findAll(pageable);
@@ -119,14 +117,29 @@ public class UsersService {
             response.put("totalpages", users.getTotalPages());
             response.put("users", users.getContent());
 
-
-        }catch (Exception e){
-            response.put("message",e.getMessage());
+        } catch (Exception e) {
+            response.put("message", e.getMessage());
         }
 
         return response;
     }
 
+    public Object saveUser(Users U, String token) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            JWT.validateJWT(token);
+            Object id = UR.checkByEmail(U.getEmail()); // check already email exists or !
+            if (id != null)
+                throw new Exception("Email ID already registered");
+            UR.save(U); // else add
+            response.put("code", 200);
+            response.put("message", "new user account has been created .");
 
+        } catch (Exception e) {
+            response.put("code", 500);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
 
 }
