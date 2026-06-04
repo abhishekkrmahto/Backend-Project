@@ -49,4 +49,21 @@ public class UsersController {
 	 {
 		 return US.saveUser(U, Token);
 	 }
+
+    @DeleteMapping("/deleteuser/{id}")
+    public Object deleteuser(
+            @RequestHeader("Token") String token,
+            @PathVariable(value = "id") Long id
+    ){
+        return US.deleteUser(token,id);
+    }
+
+
+    @GetMapping("/getuser/{ID}")
+    public Object getUser(@PathVariable("ID") Long id, @RequestHeader("Token") String Token)
+    {
+        return US.getUserById(id, Token);
+    }
+
+
 }

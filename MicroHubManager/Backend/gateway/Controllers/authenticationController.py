@@ -71,3 +71,27 @@ async def saveuser(U: UserSchema, Token:str = Header(...)):
             headers={"Token": Token}
         )
     return response.json()
+
+
+
+@router.delete("/deleteuser/{id}")
+async def deleteuser(id:int,Token:str = Header(...)):
+    async with httpx.AsyncClient() as client:
+        response = await client.delete(
+            f"{SPRING_URL}user/deleteuser/{id}",
+            headers={"Token": Token}
+        )
+        
+        print(response.text)
+        print(response.status_code)
+    return response.json()
+
+
+@router.get("/getuser/{ID}")
+async def getUser(ID: int, Token: str = Header(...)):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{SPRING_URL}user/getuser/{ID}",
+            headers = {"Token": Token}
+        )
+    return response.json()

@@ -16,6 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import mth.models.Users;
 import mth.repository.RoleRepository;
 import mth.repository.UsersRespository;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Service
 public class UsersService {
@@ -136,6 +139,40 @@ public class UsersService {
             response.put("message", "new user account has been created .");
 
         } catch (Exception e) {
+            response.put("code", 500);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+
+    public Object deleteUser(String token, Long id){
+        Map<String, Object> response = new HashMap<>();
+        try{
+            JWT.validateJWT(token);
+            UR.deleteById(id);
+            response.put("code",200);
+            response.put("message","User deleted");
+        }catch (Exception e){
+            response.put("code", 500);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+
+
+
+    public Object getUserById(Long id, String token)
+    {
+        Map<String, Object> response = new HashMap<>();
+        try
+        {
+            JWT.validateJWT(token); //Authorization
+            Users user = UR.findById(id).get();
+
+            response.put("code", 200);
+            response.put("user", user);
+        }catch(Exception e)
+        {
             response.put("code", 500);
             response.put("message", e.getMessage());
         }
