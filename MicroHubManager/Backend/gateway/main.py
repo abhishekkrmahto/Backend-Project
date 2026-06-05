@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from Controllers.authenticationController import router
+from Controllers.authenticationController import router as authRouter
+from Controllers.taskController import router as taskRouter
+
 
 app = FastAPI()
 
@@ -12,7 +14,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router)
+app.include_router(authRouter)
+app.include_router(taskRouter)
 
 @app.get("/")
 def home():

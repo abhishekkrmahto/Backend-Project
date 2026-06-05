@@ -28,4 +28,8 @@ public interface UsersRespository extends JpaRepository<Users, Long> {
 
     @Query("select U, R from Users U left join Roles R on U.role = R.role where U.email = :email")
     public Object profileByEmail(@Param("email") String email);
+
+
+    @Query("select U from Users U where lower(U.fullname) like concat('%', lower(:key), '%') or lower(U.email) like concat('%', lower(:key), '%')")
+    public List<Object> searchUser(@Param("key") String key);
 }

@@ -58,9 +58,10 @@ public class UsersService {
         Map<String, Object> response = new HashMap<>();
         try {
             Object role = UR.validateCredentials(data.get("username").toString(), data.get("password").toString());
+            Users user = (Users) UR.findByEmail(data.get("username").toString());
             if (role != null) {
                 response.put("code", 200);
-                response.put("jwt", JWT.generateJWT(data.get("username"), role));
+                response.put("jwt", JWT.generateJWT(data.get("username"), role,user.getId()));
             } else {
                 response.put("code", 404);
                 response.put("message:- ", "Invalid creds!!");
@@ -171,6 +172,23 @@ public class UsersService {
 
             response.put("code", 200);
             response.put("user", user);
+        }catch(Exception e)
+        {
+            response.put("code", 500);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+
+
+    public Object searchUser(String key, String token)
+    {
+        Map<String, Object> response = new HashMap<>();
+        try
+        {
+            List<Object> users = UR.searchUser(key);
+            response.put("code", 200);
+                response.put("users", users);
         }catch(Exception e)
         {
             response.put("code", 500);

@@ -12,7 +12,7 @@ export async function createTask(data, token) {
     try {
         const payload = jwt.verify(token, SECRETE_KEY);
         console.log(payload)
-        data.createdby = payload.username;
+        data.createdby = payload.role;
         // data.createdby =  payload.crid;
         await Tasks.create(data);
         return {code: 200, message: "New task has been created"};

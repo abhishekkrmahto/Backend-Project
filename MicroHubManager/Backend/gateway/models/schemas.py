@@ -17,3 +17,12 @@ class UserSchema(BaseModel):
     password: str
     role: int
     status:int
+    
+class TaskSchema(BaseModel):
+    title:str
+    description:str
+    createdby:int
+    assignedto:int
+    priority:int
+    deadline:str
+    status:int

@@ -66,4 +66,13 @@ public class UsersController {
     }
 
 
+    @GetMapping("/searchuser/{KEY}")
+    public Object getUsers(@PathVariable("KEY") String key, @RequestHeader("Token") String Token)
+    {
+        return US.searchUser(key,Token);
+    }
+
+
+
+
 }
