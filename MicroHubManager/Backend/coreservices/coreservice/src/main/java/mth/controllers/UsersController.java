@@ -67,12 +67,11 @@ public class UsersController {
 
 
     @GetMapping("/searchuser/{KEY}")
-    public Object getUsers(@PathVariable("KEY") String key, @RequestHeader("Token") String Token)
+    public Object searchuser(@PathVariable("KEY") String KEY, @RequestHeader("Token") String Token)
     {
-        return US.searchUser(key,Token);
+        System.out.println("TOKEN: " + Token);
+        return US.searchUser(KEY, Token);
     }
-
-
 
 
 }

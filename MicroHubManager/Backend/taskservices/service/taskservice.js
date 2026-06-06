@@ -10,10 +10,10 @@ export async function createTask(data, token) {
         console.log("DATA:", data);
     console.log("TOKEN:", token);
     try {
-        const payload = jwt.verify(token, SECRETE_KEY);
+        const payload = jwt.verify(token, SECRETE_KEY, { algorithms: ['HS384'] });
         console.log(payload)
-        data.createdby = payload.role;
-        // data.createdby =  payload.crid;
+        // data.createdby = payload.role;
+        data.createdby =  payload.crid;
         await Tasks.create(data);
         return {code: 200, message: "New task has been created"};
     } catch (error) {

@@ -98,11 +98,12 @@ async def getUser(ID: int, Token: str = Header(...)):
 
 
 @router.get("/searchuser/{KEY}")
-async def searchUser(KEY: str, Token: str = Header(...)):
+async def searchUser(KEY: str, token: str = Header(...)):
+    print("TOKEN:", token)  # yahan dekho kya aa raha hai
     async with httpx.AsyncClient() as client:
         response = await client.get(
             SPRING_URL + f"user/searchuser/{KEY}",
-            headers = {"Token": Token}
+            headers = {"Token": token}
         )
     return response.json()
 

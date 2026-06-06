@@ -186,9 +186,10 @@ public class UsersService {
         Map<String, Object> response = new HashMap<>();
         try
         {
-            List<Object> users = UR.searchUser(key);
+            JWT.validateJWT(token);
+            List<Users> users = UR.searchUser(key);
             response.put("code", 200);
-                response.put("users", users);
+            response.put("users", users);
         }catch(Exception e)
         {
             response.put("code", 500);
