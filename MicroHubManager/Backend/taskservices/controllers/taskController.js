@@ -22,7 +22,7 @@ router.delete("/deletetask/:ID", async (req, res)=>{
 });
 
 
-// ✅ FIXED: Changed taskServices to taskService (typo fix)
+
 router.get("/gettask/:ID", async(req, res) => {
     const { ID } = req.params;
     const response = await taskService.getTask(ID, req.headers["token"]);  // ✅ Fixed: was taskServices
@@ -36,5 +36,11 @@ router.put("/updatetask/:ID", async (req, res) => {
     res.json(response);
 });
 
+
+router.get("/vectorsearch/:QUERY", async (req, res)=>{
+    const {QUERY} = req.params;
+    const response = await taskService.vectorSearch(QUERY, req.headers.token);
+    res.json(response);
+});
 
 export default router;

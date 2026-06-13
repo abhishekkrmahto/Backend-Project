@@ -58,3 +58,17 @@ async def updateFunction(ID: str, T: TaskSchema, token: str = Header(...)):
             headers = {"Token": token}
         )
     return response.json()
+
+
+@router.get("/vectorsearch/{QUERY}")
+async def vectorSearch(QUERY: str, Token: str = Header(...)):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            SPRING_URL + f"task/vectorsearch/{QUERY}",
+            headers={"Token": Token}
+        )
+
+    print("STATUS =", response.status_code)
+    print("BODY =", response.text)
+
+    return response.json()

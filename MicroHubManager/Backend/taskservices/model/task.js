@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const taskSchema = new mongoose.Schema({
     title:{type:String,required:true},
     description:{type:String,required:true},
-    createdby:{type:Number,required:true},
+    createdby: {type: Number, required: true},
+    vector: {type: [Number]},
     assignedto:{type:Number,required:true},
     priority:{type:Number,required:true},
     deadline:{type:String,required:true},
