@@ -66,3 +66,38 @@ export async function deleteTask(id, token)
     }
     return response;
 }
+
+export async function getTask(id, token) {
+    try {
+        const payload = jwt.verify(token, SECRETE_KEY);
+        const task = await Tasks.findOne({ _id: id, createdby: payload.crid });
+
+        if (!task)
+            return { code: 404, message: "Task not found" };
+
+        return { code: 200, task };
+    } catch (e) {
+        return { code: 500, message: e.message };
+    }
+}
+
+export async function updateTask(id, data, token) {
+  let response;
+  try {
+    const payload = jwt.verify(token, SECRETE_KEY, { algorithms: ["HS384"] });
+
+    const updated = await Tasks.findOneAndUpdate({ _id: id }, data, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updated) {
+      response = { code: 404, message: "Task not found" };
+    } else {
+      response = { code: 200, message: "Task has been updated", task: updated };
+    }
+  } catch (e) {
+    response = { code: 500, message: e.message };
+  }
+  return response;
+}

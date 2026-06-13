@@ -1,6 +1,5 @@
 import express from 'express'
-import * as taskService from '../service/taskservice.js'
-
+import * as taskService from '../service/taskservice.js'  // ✅ Fixed import
 
 
 const router = express.Router();
@@ -8,7 +7,6 @@ const router = express.Router();
 router.post("/createtask",async(req,res)=>{
     res.json(await taskService.createTask(req.body,req.headers["token"]));
 })
-
 
 
 router.get("/getalltasks/:PAGE/:SIZE", async (req, res) => {
@@ -20,6 +18,21 @@ router.get("/getalltasks/:PAGE/:SIZE", async (req, res) => {
 router.delete("/deletetask/:ID", async (req, res)=>{
     const {ID} = req.params;
     const response = await taskService.deleteTask(ID, req.headers["token"]);
+    res.json(response);
+});
+
+
+// ✅ FIXED: Changed taskServices to taskService (typo fix)
+router.get("/gettask/:ID", async(req, res) => {
+    const { ID } = req.params;
+    const response = await taskService.getTask(ID, req.headers["token"]);  // ✅ Fixed: was taskServices
+    res.json(response);
+});
+
+
+router.put("/updatetask/:ID", async (req, res) => {
+    const { ID } = req.params;
+    const response = await taskService.updateTask(ID, req.body, req.headers["token"]);
     res.json(response);
 });
 
